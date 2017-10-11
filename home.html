@@ -1,0 +1,1448 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>IST Home</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="ExpandingSearchBar/css/component.css" />
+    <link rel="stylesheet" href="jquery.modal.css" type="text/css" media="screen" />
+   
+    <script src="jquery.js"></script>
+    <script src="parallax.js"></script>
+    <script src="particles/src/particles.js"></script>
+    <script src="jquery.modal.js" type="text/javascript" charset="utf-8"></script>
+    
+    <style type="text/css" media="screen">
+    small { color: #aaa; }
+    h1,h2,h3,h4 { color: #444; font-weight: 700; letter-spacing: -1px; }
+    a { color: #0086B3; font-weight: 700; }
+    a:hover { color: #000; }
+    p code, li code {background:#ffffcc; color: #444; }
+    pre { font-size: 12px; line-height: 18px; }
+    pre code { overflow: scroll; padding: 1em; border-radius: 10px; }
+    hr { height: 10px; background: #eee; border: none; }
+    table {width:100%;border-collapse:collapse;}
+    td { border: 1px solid #eee; padding: 15px; }
+    td pre { margin: 0; }
+
+    body > .modal {
+      display: none;
+    }
+
+    
+    .login_form.modal {
+      border-radius: 0;
+      line-height: 18px;
+      padding: 0;
+      font-family: "Lucida Grande", Verdana, sans-serif;
+    }
+
+    .login_form h3 {
+      margin: 0;
+      padding: 10px;
+      color: #fff;
+      font-size: 14px;
+      background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+      background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+    }
+
+    .login_form.modal p { padding: 20px 30px; border-bottom: 1px solid #ddd; margin: 0;
+      background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #eee),color-stop(1, #fff));
+      overflow: hidden;
+    }
+    .login_form.modal p:last-child { border: none; }
+    .login_form.modal p label { float: left; font-weight: bold; color: #333; font-size: 13px; width: 110px; line-height: 22px; }
+    .login_form.modal p input[type="text"],
+    .login_form.modal p input[type="password"] {
+      font: normal 12px/18px "Lucida Grande", Verdana;
+      padding: 3px;
+      border: 1px solid #ddd;
+      width: 200px;
+    }
+
+
+    .part {
+      display: none;
+    }
+
+  </style>
+    
+    <script type="text/javascript">     
+        
+        //this function creates a particle animation using jquery
+        window.onload = function() {
+            Particles.init({
+                selector: '#myCanvas',
+                color: '#0f9976',
+                connectParticles: 'true',
+                maxParticles: '270',
+                sizeVariations: '10',
+                minDistance: '120',
+                speed: '2'
+            });
+        };
+        
+      
+        //this loads the about section from the IST api about
+        $.getJSON("https://people.rit.edu/~sarics/web_proxy.php?path=about", function (data) {
+            $('#aH').append(data.title);
+            $('#aH2').append(data.description);
+            $('#aH3').append(data.quote);
+            $('#aHQ').append(" - "+data.quoteAuthor);
+        });   
+        
+        //this loads the degree section from the IST api degrees
+        $.getJSON("https://people.rit.edu/~sarics/web_proxy.php?path=degrees", function (data) {
+            $.each(data.undergraduate, function(index,obj){
+                $('#ug'+index).append(obj.title);
+                $('#ugp' + index).append(obj.description);
+                $('#ugul' + index).append("<h2 style='text-align:center;color:orangered;'>" + obj.title + "</h3><br/><br/>");
+                $('#ugul' + index).append("<br /><h3 style='color:black;'> Concentrations : </h3><br/>");
+                $.each(obj.concentrations, function(i, o){
+                    $('#ugul'+index).append("<li>"+o+"</li>");
+                });
+            });
+            $.each(data.graduate, function(index,obj){
+                $('#g' + index).append(obj.title);
+                
+                $('#gp' + index).append( obj.description);
+                //$('#gp' + index).append("<br /><h3 style='color:orangered;'> Concentrations </h3>");
+                //$('#exm' + index).append(obj.courses[0]);
+                $('#gul' + index).append("<h2 style='text-align:center;color:orangered;'>" + obj.title + "</h3><br/><br/>");
+                $('#gul' + index).append("<br /><h3 style='color:black;'> Concentrations : </h3><br/>");
+                $.each(obj.concentrations, function (i, o) {
+                    $('#gul'+index).append("<li>"+o+"</li>");
+                });
+            });
+        }); 
+        
+        //this loads the minors section from the IST api minors
+        $.getJSON("https://people.rit.edu/~sarics/web_proxy.php?path=minors", function (data) {
+            //console.log(data)
+            $.each(data, function(index,obj){
+                $('#m' + index).append("<h3 style='text-align:center;color:blue;'>" + obj.title + "</h3>");
+                $('#exm' + index).append("<h2 style='text-align:center;color:orangered;'>" + obj.title + "</h3><br/>");
+                $('#exm' + index).append("<br /><br /><p style='text-align:center;color:black;'>" + obj.description + "</p>");
+                $('#exm' + index).append("<br /><h3 style='color:orangered;'> Courses </h3>");
+                //$('#exm' + index).append(obj.courses[0]);
+                //$('#exm' + index).append("<ul id='exm" + index + "'></ul>");
+                $.each(obj.courses, function (i, o) {
+                    $('#exm' + index).append("<li>" + o + "</li>");
+                });
+                $('#exm' + index).append("<br /><h3 style='color:orangered;'text-align:center;'>Note : </h3>");
+                $('#exm' + index).append(obj.note);
+
+            });
+        });
+        
+        //this loads the people section
+        $.getJSON("https://people.rit.edu/~sarics/web_proxy.php?path=people", function (data) {
+            console.log(data);
+            $('#tH').append(data.title)
+            $('#tP').append(data.subTitle)
+            console.log(data.faculty);
+            $.each(data.faculty, function (index, obj) {
+                $('#imgs' + index).append("<h2 style='text-align:center;color:orangered;'>" + obj.name + "</h3>");
+                $('#imgs' + index).append("<br />");
+                $('#imgs' + index).append("<br />");
+                $('#imgs' + index).append("<h3 style='text-align:left;color:black;'> Title : " + obj.title + "</h3>");
+                $('#imgs' + index).append("<h3 style='text-align:left;color:black;'> Interest Area : " + obj.interestArea + "</h3>");
+                $('#imgs' + index).append("<h3 style='text-align:left;color:black;'> Office : " + obj.office + "</h3>");
+                $('#imgs' + index).append("<h3 style='text-align:left;color:black;'> Website : " + obj.website + "</h3>");
+                $('#imgs' + index).append("<h3 style='text-align:left;color:black;'> Phone Number : " + obj.phone + "</h3>");
+                $('#imgs' + index).append("<h3 style='text-align:left;color:black;'> Email : " + obj.email + "</h3>");
+                               
+            });
+        });
+
+        //this loads faculty research:area of interest
+        $.getJSON("https://people.rit.edu/~sarics/web_proxy.php?path=research", function (data) {
+            //console.log();
+            $.each(data.byInterestArea, function (index, obj) {
+                $('#cirt' + index).append(obj.areaName);
+                $('#cir' + index).append("<h2 style='text-align:center;color:orangered;'>Research By Domain Area : " + obj.areaName + "</h2>");
+                $('#cir' + index).append("<br/><br/><br/>");
+
+                $.each(obj.citations, function (i, o) {
+                    $('#cir' + index).append("<li>" + o + "</li>");
+                });
+            });
+            $('#fc').append(data.social.title);
+            $('#os').append("<br/>");
+            $('#os').append("<br/>");
+
+
+            //console.log(obj.title);
+            $('#osH').append(data.social.tweet);
+            $('#osH').append("<br/>");
+            $('#osH').append("<br/>");
+            $('#osH').append("<br/>");
+            $('#osH').append("-" + data.social.by);
+        });
+        
+        $.getJSON("https://people.rit.edu/~sarics/web_proxy.php?path=footer", function (data) {
+            //console.log();
+            $('#os').append(data.social.title);
+            $('#os').append("<br/>");
+            $('#os').append("<br/>");
+            
+            
+            //console.log(obj.title);
+            $('#osH').append(data.social.tweet);
+            $('#osH').append("<br/>");
+            $('#osH').append("<br/>");
+            $('#osH').append("<br/>");
+            $('#osH').append("-" + data.social.by);
+
+            $.each(data.quickLinks, function (index, obj) {
+                $('#last' + index).append(obj.title);
+            });
+            $('#copy').append(data.copyright.title);
+            $('#copy').append(data.copyright.html);
+
+
+        });
+
+        
+        
+        
+                
+
+    </script>
+</head>
+    
+    
+    
+<body>
+<div class="wrapper">
+
+<div id="mainBody">
+<!--This section displays the about section --> 
+<div class="parallax-window" id="pHome" data-type="parallax_section" data-speed="10">  
+    <div style="float:left;width:100%;heigth:100px;padding-top:0px;padding-bottom:30px">
+        <h1 style="color:white;text-shadow:2px 2px blue">Information Sciences and Technology </h1>
+    </div>
+<div id="about" style="position:absolute;left:15%;top:250px;width:70%;height:400px;background-color:aliceblue;text-align:center;opacity:0.95">
+    <h2 id="aH" style="padding-top:50px;padding-bottom:50px"></h2>
+    <h3 id="aH2"></h3>
+    <br/>
+    <h2 style="color:darkblue;">* * *</h2 >
+    <h4 id="aH3" style="color:darkblue;"></h4><h2 style="color:darkblue;">* * *</h2>
+    <h4 id="aHQ" style="color:orangered;text-align:center"></h4>
+    
+    </div>
+</div>
+</div>
+   <!--This section displays the undergraduate degrees and when clicked on 
+       displays the concentrations under the clicked degree--> 
+<div class="parallax-window" data-type="parallax_section" data-speed="10" style="padding-top:0px;">
+    <div style="float:left;background-color:aliceblue;opacity:0.9;width:100%;heigth:60px;">
+        <h1 style="text-align:center;">Our Undergraduate Degrees</h1>
+    </div>
+        <div style="position: absolute;width:100%;top:20%">
+            <div style="width:9%;height:100px;float:left"></div>
+
+            <div onmouseout="this.style.boxShadow = '0px 0px 0px maroon';"
+              onmouseover="this.style.boxShadow = '0px 0px 50px maroon';" style="width:25%;height:400px;border: 1px solid red;float:left;text-align:center;padding-top:35px;background-color:aliceblue;opacity:0.95">
+                <h2 id="ug0" style="height:25%;color:orangered"></h2>
+                <p id="ugp0" style="height:35%"></p>
+                <div style="height:25%"></div>
+                <a href="#ex0" rel="modal:open"><img src="plus.png" height="35" width="35"></a>
+                <div class="modal" id="ex0" style="display:none;">
+                    <ul id="ugul0"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+                <p>Click to find out more.</p>
+            </div>
+
+            <div style="width:3%;height:100px;float:left"></div>
+
+            <div onmouseout="this.style.boxShadow = '0px 0px 0px green';"
+              onmouseover="this.style.boxShadow = '0px 0px 50px green';" style="width:25%;height:400px;border: 1px solid green;float:left;text-align:center;padding-top:35px;background-color:aliceblue;opacity:0.95">
+                <h2 id="ug1" style="height:25%;color:green"></h2>
+                <p id="ugp1" style="height:35%"></p>
+                <div style="height:25%"></div>
+                <a href="#ex1" rel="modal:open"><img src="plus.png" height="35" width="35"></a>
+                <div class="modal" id="ex1" style="display:none;">
+                    <ul id="ugul1"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+                <p>Click to find out more.</p>
+            </div>
+
+            <div style="width:3%;height:100px;float:left"></div>
+
+            <div style="width:25%;height:400px;border: 1px solid blue;float:left;
+                    text-align:center;padding-top:35px;background-color:aliceblue;
+                    opacity:0.95" onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+              onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue';">
+                <h2 id="ug2" style="height:25%;color:blue"></h2>
+                <p id="ugp2" style="height:35%"></p>
+                <div style="height:25%"></div>
+                <a href="#ex2" rel="modal:open"><img src="plus.png" height="35" width="35"></a>
+                <div class="modal" id="ex2" style="display:none;">
+                    <ul id="ugul2"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+                <p>Click to find out more.</p>
+            </div>
+        </div>
+    </div>
+
+<!--This section displays the graduate degrees and when clicked on
+          displays the concentrations under the clicked degree-->    
+<div class="parallax-window" id="p1" data-type="parallax_section" data-speed="10" style="padding-top:10px;">  
+   <div style="float:left;width:100%;heigth:60px">
+
+    <h1 style="text-align:center;color:white;text-shadow:2px 2px blue">Our Graduate Degrees</h1>
+    </div>
+    <div  style="position: absolute;width:100%;top:25%">
+        <div style="width:9%;height:100px;float:left"></div>
+        
+        <div onmouseout="this.style.boxShadow = '0px 0px 0px maroon';"
+              onmouseover="this.style.boxShadow = '0px 0px 50px maroon';" style="width:25%;height:400px;border: 1px solid red;float:left;text-align:center;padding-top:35px;background-color:aliceblue;opacity:0.95">
+            <h2 id="g0" style="height:25%"></h2>
+            <p id="gp0" style="height:35%"></p>
+            <div style="height:25%"></div>          
+            <a href="#exg0" rel="modal:open"><img src="plus.png" height="35" width="35"></a>
+            <div class="modal" id="exg0" style="display:none;">     
+                <ul id="gul0"></ul>
+                <p> 
+                    <br /> 
+                    <a href="#" rel="modal:close"></a>
+                </p>
+            </div>          
+            <p>Click to find out more.</p>           
+        </div>
+        
+        <div style="width:3%;height:100px;float:left"></div>
+
+        <div onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+              onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue';" style="width:25%;height:400px;border: 1px solid blue;float:left;text-align:center;padding-top:35px;background-color:aliceblue;opacity:0.95">
+            <h2 id="g1" style="height:25%"></h2>
+            <p id="gp1" style="height:35%;padding-bottom:100px;"></p>
+            <div style="height:25%"></div>          
+            <a href="#exg1" rel="modal:open"><img src="plus.png" height="35" width="35"></a>
+            <div class="modal" id="exg1" style="display:none;"> 
+                <ul id="gul1"></ul>
+                <p>  
+                    <br /> 
+                    <a href="#" rel="modal:close"></a>
+                </p>
+            </div>
+
+            <p>Click to find out more.</p>
+
+        </div>
+        
+        <div style="width:3%;height:100px;float:left"></div>
+
+        <div onmouseout="this.style.boxShadow = '0px 0px 0px green';"
+              onmouseover="this.style.boxShadow = '0px 0px 50px green';" style="width:25%;height:400px;border: 1px solid green;float:left;text-align:center;padding-top:35px;background-color:aliceblue;opacity:0.95">
+            
+            <h2 id="g2" style="height:25%"></h2>
+            <p id="gp2" style="height:35%;"></p>
+            <div style="height:25%"></div>          
+            <a href="#exg2" rel="modal:open"><img src="plus.png" height="35" width="35"></a>
+            <div class="modal" id="exg2" style="display:none;">
+                <ul id="gul2"></ul>
+                <p>  
+                    <br /> 
+                    <a href="#" rel="modal:close"></a>
+                </p>
+            </div>          
+            <p>Click to find out more.</p>
+
+        </div>
+    </div>
+</div>
+
+    <!--This section displays the Undergraduate minors and when clicked on
+         displays the detailed information about the undergraduate minor-->
+    
+ <div class="parallax-window" data-type="parallax_section" data-speed="10" style="padding:20px;font-color:aliceblue">
+        <canvas id="myCanvas"></canvas>
+        <h1 style="align:center;">Our Undergraduate Minors</h1>
+
+
+        <div style="width:6%;height:100px;float:left"></div>
+        
+     
+     <div id="m0" style="width:20%;height:200px;float:left;text-align:center;padding-top:35px;background-color:lightcyan;opacity:0.9"
+          onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+          onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue'; ">
+         <a href="#exm0" rel="modal:open"><img src="yess.gif" height="65" width="65"></a>
+
+         <div class="modal" id="exm0" style="display:none;">
+             <ul id="exml0"></ul>
+             <p>
+                 <br />
+                 <a href="#" rel="modal:close"></a>
+             </p>
+         </div>
+     </div>
+
+     <div style="width:3%;height:100px;float:left"></div>
+     
+     
+         
+         <div id="m1" onclick="location.href='#exm1';location.rel='modal:open'" style="width:20%;height:200px;float:left;text-align:center;padding-top:35px;background-color:lightgoldenrodyellow;opacity:0.9"
+              onmouseout="this.style.boxShadow = '0px 0px 0px mediumpurple';"
+              onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; ">
+
+             <a href="#exm1" rel="modal:open"><img src="yess.gif" height="65" width="65"></a>
+
+             <div class="modal" id="exm1" style="display:none;">
+                 <ul id="exm1"></ul>
+                 <p>
+                     <br />
+                     <a href="#" rel="modal:close"></a>
+                 </p>
+             </div>
+         </div>            
+    
+    <div style="width:3%;height:100px;float:left"></div>
+
+    
+    <div id="m2" 
+         style="width:20%;height:200px;float:left;text-align:center;padding-top:35px;background-color:lightcyan;opacity:0.9"
+        onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+        onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue'; ">
+        <a href="#exm2" rel="modal:open"><img src="yess.gif" height="65" width="65"  ></a>
+
+        <div class="modal" id="exm2" style="display:none;">
+            <ul id="exm2"></ul>
+            <p>
+                <br />
+                <a href="#" rel="modal:close"></a>
+            </p>
+        </div>
+        </div>
+    
+    <div style="width:3%;height:100px;float:left"></div>
+
+    
+    <div id="m3" 
+         style="width:20%;height:200px;float:left;text-align:center;padding-top:35px;background-color:lightgoldenrodyellow;opacity:0.9"
+        onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+        onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue'; ">        
+     <a href="#exm3" rel="modal:open"><img src="yess.gif" height="65" width="65"></a>
+     <div class="modal" id="exm3" style="display:none;">
+         <ul id="exm3"></ul>
+         <p>
+             <br />
+             <a href="#" rel="modal:close"></a>
+         </p>
+     </div>
+     </div>
+    
+    
+    <br />
+    <div style="width:100%;height:30px;float:left"></div>
+    <br />
+
+    <div style="width:6%;height:100px;float:left"></div>
+
+     <div id="m4" style="width:20%;height:200px;float:left;text-align:center;padding-top:35px;background-color:lightgoldenrodyellow;opacity:0.9"
+          onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+          onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue'; ">
+         <a href="#exm4" rel="modal:open"><img src="yess.gif" height="65" width="65"></a>
+         <div class="modal" id="exm4" style="display:none;">
+             <ul id="exm4"></ul>
+             <p>
+                 <br />
+                 <a href="#" rel="modal:close"></a>
+             </p>
+         </div>
+     </div>
+
+    <div style="width:3%;height:100px;float:left"></div>
+    
+     <div id="m5" style="width:20%;height:200px;float:left;text-align:center;padding-top:35px;background-color:lightcyan;opacity:0.9"
+         onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+         onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue'; ">
+         <a href="#exm5" rel="modal:open"><img src="yess.gif" height="65" width="65"></a>
+         <div class="modal" id="exm5" style="display:none;">
+             <ul id="exm5"></ul>
+             <p>
+                 <br />
+                 <a href="#" rel="modal:close"></a>
+             </p>
+         </div>
+     </div>
+   
+    
+
+
+    <div style="width:3%;height:100px;float:left"></div>
+
+     <div id="m6" style="width:20%;height:200px;float:left;text-align:center;padding-top:35px;background-color:lightgoldenrodyellow;opacity:0.9"
+         onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+         onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue'; ">
+         <a href="#exm6" rel="modal:open"><img src="yess.gif" height="65" width="65"></a>
+         <div class="modal" id="exm6" style="display:none;">
+             <ul id="exm6"></ul>
+             <p>
+                 <br />
+                 <a href="#" rel="modal:close"></a>
+             </p>
+         </div>
+     </div>
+
+    <div style="width:3%;height:100px;float:left"></div>
+
+     <div id="m7" style="width:20%;height:200px;float:left;text-align:center;padding-top:35px;background-color:lightcyan;opacity:0.9"
+         onmouseout="this.style.boxShadow = '0px 0px 0px midnightblue';"
+         onmouseover="this.style.boxShadow = '0px 0px 50px midnightblue'; ">
+         <a href="#exm7" rel="modal:open"><img src="yess.gif" height="65" width="65"></a>
+         <div class="modal" id="exm7" style="display:none;">
+             <ul id="exm7"></ul>
+             <p>
+                 <br />
+                 <a href="#" rel="modal:close"></a>
+             </p>
+         </div>
+     </div>
+        
+</div>
+
+    <!--Here a map is diplayed in iframe with markers which shows the places where RIT 
+        student worl around the world.
+        When clikced on the pointers, the map shows the location of the work place.-->
+<div class="parallax-window" id="p2" data-type="parallax_section" data-speed="10" style="padding-top:20px">  
+<div style="float:left;width:100%;heigth:60px">
+
+    <h1 style="color:white;text-shadow:2px 2px blue">Where our students work</h1>
+    </div>
+   
+    <div id="id" >
+        <iframe src="https://ist.rit.edu/api/map/" 
+                style="position:absolute;left:10%;top:180px;width:80%;height:500px;z-index:10;"
+                scrolling="no"
+                frameborder="0"></iframe>
+    </div>
+</div>
+
+</div>
+
+    <!--Shows the researches done by faculty based on the area of interest-->
+    <div class="parallax-window" data-type="parallax_section" data-speed="10" style="padding-top:0px;">
+        <div style="float:left;background-color:aliceblue;opacity:0.9;width:100%;heigth:60px;">
+            <h1 style="text-align:center;">Faculty Research: Area of Interest</h1>
+            <h3 style="text-align:center;color:orangered">Click the area you’re interested in to explore our faculty publications</h3>
+        </div>
+
+        <div style="width:2%;height:100px;float:left"></div>
+        <div>
+
+
+            <svg height="200" width="200">
+                <a href="#cir0" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad0" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(0,221,255);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(0,30,255);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad0)" />
+                    <text id="cirt0" style="text-align:center" fill="#ffffff" font-size="25" font-family="Verdana" x="75" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir0" style="display:none;">
+
+                    <ul id="cir0"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir1" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(43,123,227);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(255,0,68);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad1)" />
+                    <text id="cirt1" fill="#ffffff" font-size="25" font-family="Verdana" x="35" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir1" style="display:none;">
+
+                    <ul id="cir1"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir2" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(0,255,166);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(255,145,0);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad2)" />
+                    <text id="cirt2" fill="#ffffff" font-size="25" font-family="Verdana" x="75" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir2" style="display:none;">
+
+                    <ul id="cir2"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir3" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(84,67,45);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(227,147,43);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad3)" />
+                    <text id="cirt3" fill="#ffffff" font-size="25" font-family="Verdana" x="35" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir3" style="display:none;">
+
+                    <ul id="cir3"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir4" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(43,227,104);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(43,65,227);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad4)" />
+                    <text id="cirt4" fill="#ffffff" font-size="25" font-family="Verdana" x="35" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir4" style="display:none;">
+
+                    <ul id="cir4"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir5" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(227,221,43);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(43,123,227);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad5)" />
+                    <text id="cirt5" fill="#ffffff" font-size="25" font-family="Verdana" x="75" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir5" style="display:none;">
+
+                    <ul id="cir5"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+        </div>
+        <div style="width:2%;height:100px;float:left"></div>
+        <div>
+
+            <svg height="200" width="200">
+                <a href="#cir6" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad6" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad6)" />
+                    <text id="cirt6" fill="#ffffff" font-size="25" font-family="Verdana" x="20" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir6" style="display:none;">
+
+                    <ul id="cir6"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir7" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad7" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(227,83,43);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(43,74,227);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad7)" />
+                    <text id="cirt7" fill="#ffffff" font-size="25" font-family="Verdana" x="55" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir7" style="display:none;">
+
+                    <ul id="cir7"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir8" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad8" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(95,43,227);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(141,191,105);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad8)" />
+                    <text fill="#ffffff" font-size="25" font-family="Verdana" x="55" y="90">Health</text>
+                    <text fill="#ffffff" font-size="25" font-family="Verdana" x="15" y="120">Information</text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir8" style="display:none;">
+
+                    <ul id="cir8"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir9" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad9" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(55,7,89);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(199,48,131);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad9)" />
+                    <text id="cirt9" fill="#ffffff" font-size="22.5" font-family="Verdana" x="15" y="110"></text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir9" style="display:none;">
+
+                    <ul id="cir9"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir10" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad10" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(40,237,227);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(237,40,83);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad10)" />
+                    <text fill="#ffffff" font-size="22.5" font-family="Verdana" x="55" y="90">System</text>
+                    <text fill="#ffffff" font-size="20.5" font-family="Verdana" x="15" y="120">Administration</text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir10" style="display:none;">
+
+                    <ul id="cir10"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+            <svg height="200" width="200">
+                <a href="#cir11" rel="modal:open">
+                    <defs>
+                        <linearGradient id="grad11" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(40,132,237);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(44,237,40);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="85" fill="url(#grad11)" />
+                    <text fill="#ffffff" font-size="23" font-family="Verdana" x="28" y="90">Ubiquitous</text>
+                    <text fill="#ffffff" font-size="25" font-family="Verdana" x="25" y="120">Computing</text>
+                    Sorry, your browser does not support inline SVG.
+                </a>
+                <div class="modal" id="cir11" style="display:none;">
+
+                    <ul id="cir11"></ul>
+                    <p>
+                        <br />
+                        <a href="#" rel="modal:close"></a>
+                    </p>
+                </div>
+            </svg>
+
+
+
+        </div>
+
+    </div>
+
+<!--Images of faculty members are displayed, which when clicked on gives the 
+    contact information of the faculty-->
+<div id="p3" class="parallax-window" data-type="parallax_section" data-speed="10" style="padding-top:10px;">
+    <div style="float:left;width:100%;heigth:60px">
+        <h1 id="tH" style="color:white;text-shadow:2px 2px blue"></h1>
+        <p id="tP" style="color:white;text-align:center"></p>
+    </div>
+    
+    <div style="position: absolute;width:100%;top:25%">
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im0" rel="modal:open">
+                <defs>
+                    <pattern id="img0" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/0.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img0)" />
+                </a>
+            <div class="modal" id="im0" style="display:none;">
+                <ul id="imgs0"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12.5%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im1" rel="modal:open">
+                <defs>
+                    <pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/1.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img1)" />
+            </a>
+            <div class="modal" id="im1" style="display:none;">
+                <ul id="imgs1"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+
+        </svg>
+
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im2" rel="modal:open">
+                <defs>
+                    <pattern id="img2" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/2.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img2)" />
+            </a>
+
+            <div class="modal" id="im2" style="display:none;">
+                <ul id="imgs2"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+        </svg>
+
+
+
+
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im3" rel="modal:open">
+                <defs>
+
+                    <pattern id="img3" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/3.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img3)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im3" style="display:none;">
+                <ul id="imgs3"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im4" rel="modal:open">
+                <defs>
+
+                    <pattern id="img4" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/4.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img4)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im4" style="display:none;">
+                <ul id="imgs4"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im5" rel="modal:open">
+                <defs>
+
+                    <pattern id="img5" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/5.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img5)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im5" style="display:none;">
+                <ul id="imgs5"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+        
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im6" rel="modal:open">
+                <defs>
+
+                    <pattern id="img6" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/6.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img6)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im6" style="display:none;">
+                <ul id="imgs6"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close"></a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im7" rel="modal:open">
+                <defs>
+                    <pattern id="img7" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/7.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img7)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im7" style="display:none;">
+                <ul id="imgs7"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im8" rel="modal:open">
+                <defs>
+                    <pattern id="img8" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/8.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img8)" />
+            </a>
+            <div class="modal" id="im8" style="display:none;">
+                <ul id="imgs8"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12.5%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im9" rel="modal:open">
+                <defs>
+                    <pattern id="img9" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/9.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img9)" />
+            </a>
+            <div class="modal" id="im9" style="display:none;">
+                <ul id="imgs9"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+
+        </svg>
+
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im10" rel="modal:open">
+                <defs>
+                    <pattern id="img10" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/10.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img10)" />
+            </a>
+
+            <div class="modal" id="im10" style="display:none;">
+                <ul id="imgs10"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+        </svg>
+
+
+
+
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im11" rel="modal:open">
+                <defs>
+
+                    <pattern id="img11" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/11.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img11)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im11" style="display:none;">
+                <ul id="imgs11"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im12" rel="modal:open">
+                <defs>
+
+                    <pattern id="img12" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/12.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img12)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im12" style="display:none;">
+                <ul id="imgs12"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im13" rel="modal:open">
+                <defs>
+
+                    <pattern id="img13" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/13.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img13)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im13" style="display:none;">
+                <ul id="imgs13"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im14" rel="modal:open">
+                <defs>
+
+                    <pattern id="img14" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/14.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img14)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im14" style="display:none;">
+                <ul id="imgs14"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close"></a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im15" rel="modal:open">
+                <defs>
+                    <pattern id="img15" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/15.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img15)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im15" style="display:none;">
+                <ul id="imgs15"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im16" rel="modal:open">
+                <defs>
+                    <pattern id="img16" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/16.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img16)" />
+            </a>
+            <div class="modal" id="im16" style="display:none;">
+                <ul id="imgs16"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12.5%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im17" rel="modal:open">
+                <defs>
+                    <pattern id="img17" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/17.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img17)" />
+            </a>
+            <div class="modal" id="im17" style="display:none;">
+                <ul id="imgs17"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+
+        </svg>
+
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im18" rel="modal:open">
+                <defs>
+                    <pattern id="img18" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/18.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img18)" />
+            </a>
+
+            <div class="modal" id="im18" style="display:none;">
+                <ul id="imgs18"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">Close</a>
+                </p>
+            </div>
+        </svg>
+
+
+
+
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im19" rel="modal:open">
+                <defs>
+
+                    <pattern id="img19" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/19.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img19)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im19" style="display:none;">
+                <ul id="imgs19"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im20" rel="modal:open">
+                <defs>
+
+                    <pattern id="img20" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/20.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img20)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im20" style="display:none;">
+                <ul id="imgs20"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im21" rel="modal:open">
+                <defs>
+
+                    <pattern id="img21" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/21.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img21)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im21" style="display:none;">
+                <ul id="imgs21"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im22" rel="modal:open">
+                <defs>
+
+                    <pattern id="img22" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/22.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+
+                </defs>
+
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img22)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im22" style="display:none;">
+                <ul id="imgs22"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close"></a>
+                </p>
+            </div>
+        </svg>
+
+        <svg viewBox="0 0 100 100" width="12%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <a href="#im23" rel="modal:open">
+                <defs>
+                    <pattern id="img23" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image xlink:href="pics/23.jpg" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img23)"
+                         onmouseover="this.style.boxShadow = '0px 0px 50px mediumpurple'; " />
+            </a>
+            <div class="modal" id="im23" style="display:none;">
+                <ul id="imgs23"></ul>
+                <p>
+                    <br />
+                    <a href="#" rel="modal:close">close</a>
+                </p>
+            </div>
+        </svg>
+
+        <div></div>
+
+        
+    </div>
+ </div>
+
+
+<!--This sections directs the user to different places, and contact page if needs to be contacted and also
+    path to apply to the iste department-->
+<div class="parallax-window" data-type="parallax_section" data-speed="10" style="padding-top:0px;">
+        <div style="float:left;background-color:aliceblue;opacity:0.9;width:100%;heigth:60px;">
+            <h1 id="os" style="text-align:center;"></h1>
+        </div>
+    <div>
+        <br/>
+        <br/>
+        <br/>
+        <h3 id="osH" style="text-align:center;color:orangered"></h3>
+        <br/>
+        <br/>
+    </div>
+    <div style="align-content:center">
+        <p style="text-align:center">
+            <a href="https://twitter.com/istatrit"><img src="tw.png" height="45" width="45" /></a>
+            <a href="https://www.facebook.com/ISTatRIT"><img src="fb.png" height="45" width="45" /></a>
+
+        </p>
+    </div>
+    <div style="align-content:center">
+        <a id="last0" style="color:orangered;text-align:center" onmouseover="this.style.color='black'"
+           onmouseout="this.style.color='orangered'" href="http://www.rit.edu/admission.html"></a>
+        <br />
+        <a id="last1" style="color:orangered;text-align:center" onmouseover="this.style.color='black'"
+           onmouseout="this.style.color='orangered'" href="http://ist.rit.edu/assets/includes/calls/calls.php?area=aboutSite"></a>
+        <br />
+        <a id="last2" style="color:orangered;text-align:center" onmouseover="this.style.color='black'"
+           onmouseout="this.style.color='orangered'" href="http://ist.rit.edu/assets/includes/calls/calls.php?area=supportIST"></a>
+        <br />
+        <a id="last3" style="color:orangered;text-align:center" onmouseover="this.style.color='black'"
+           onmouseout="this.style.color='orangered'" href="http://ist.rit.edu/assets/includes/resources/calls.php?area=tutors"></a>
+    </div>
+
+    <div >
+        
+        <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="yes" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:rgb(40,132,237);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgb(44,0,40);stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect x="0" y="30" width=100% height="100px" fill="url(#yes)" />
+            
+
+            <a href="http://www.rit.edu/admission.html">
+                <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="yess" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(40,132,237);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(44,237,40);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="200" y="60" width="250" height="50" fill="url(#yess)" />
+                    <text x="323" y="90" text-anchor="middle" style="font-size:30px;color:white;"> Apply Now </text>
+                    
+                </svg>
+            </a>
+
+            <a href="http://ist.rit.edu/api/contactForm/" >
+                <svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="yess" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:rgb(40,132,237);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(44,237,40);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="800" y="60" width="250" height="50" fill="url(#yess)" />
+                    <text x="923" y="90" text-anchor="middle" style="font-size:30px;color:white;"> Contact Us </text>
+
+                </svg>
+            </a>
+            
+        </svg>
+    </div>
+    <div style="align-content:center">
+        <a id="last0"style="color:orangered;text-align:center" onmouseover="this.style.color='black'"
+           onmouseout="this.style.color='orangered'" href="http://www.rit.edu/admission.html"></a>
+        <br/>
+        <a id="last1" style="color:orangered;text-align:center" onmouseover="this.style.color='black'"
+           onmouseout="this.style.color='orangered'" href="http://ist.rit.edu/assets/includes/calls/calls.php?area=aboutSite"></a>
+        <br/>
+         <a id="last2"style="color:orangered;text-align:center" onmouseover="this.style.color='black'"
+           onmouseout="this.style.color='orangered'" href="http://ist.rit.edu/assets/includes/calls/calls.php?area=supportIST"></a>    
+        <br/>
+        <a id="last3" style="color:orangered;text-align:center" onmouseover="this.style.color='black'"
+           onmouseout="this.style.color='orangered'" href="http://ist.rit.edu/assets/includes/resources/calls.php?area=tutors"></a>
+    </div>
+    <div>
+        <h3 id="copy" style="text-align:center"></h3>
+    </div>
+</div>
+
+
+    
+
+</body>
+</html>

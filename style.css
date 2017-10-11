@@ -1,0 +1,103 @@
+*, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+*, html {
+    margin: 0;
+    padding: 0px;
+}
+
+body {
+    font-family: "Times New Roman", Times, serif;
+	background-color: aliceblue;
+}
+a {
+    position: relative;
+    z-index: 10;
+}
+
+h1, h2 {
+      width: 100%;
+      float: left;
+    }
+    h1 {
+      margin-top: 50px;
+      color: #999;
+      margin-bottom: 5px;
+      font-size: 70px;
+      font-weight: 100;
+      text-align: center;
+    }
+#header2 {
+  float: right;
+  width: 30%;
+}
+#header1 {
+  float: left;
+    width: 68%;
+}
+.wrapper {
+  position: relative;
+}
+
+#about {
+    width: 60%;
+    height: 60%;
+    background-color: black;
+}
+
+#header {
+    background: black;
+      font-family: Droid Sans;
+      font-size: 20px;
+      font-weight: bold;
+      height: 45px;
+      text-shadow: 0 1px 1px rgba(0,0,0,.2);
+      width:100%;
+      box-sizing:border-box;
+    opacity: 10;
+    }
+
+
+Canvas {
+  position: absolute;
+  display: block;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+}
+
+#pHome{
+    background: url(1.jpg) 50% 0 no-repeat fixed;
+    background-blend-mode:overlay;
+    width: 100%;
+}
+#p1{
+    background: url(3.jpg) 50% 0 no-repeat fixed;
+    background-blend-mode:overlay;
+    width: 100%;
+}
+#p2{
+    background: url(3.jpg) 50% 0 no-repeat fixed;
+    background-blend-mode:overlay;
+    width: 100%;
+}
+#p3{
+    background: url(3.jpg) 50% 0 no-repeat fixed;
+    background-blend-mode:overlay;
+    width: 100%;
+}
+
+a {
+    position: relative;
+    z-index: 5;
+}
+
+.parallax-window {
+    min-height: 700px;
+    height: 100%;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    
+}
